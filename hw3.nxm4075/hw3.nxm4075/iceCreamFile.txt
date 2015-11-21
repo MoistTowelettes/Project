@@ -1,0 +1,16 @@
+1, 1.00, Vanilla, Simple Vanilla Flavor, 80
+2, 1.00, French Vanilla, 125% Vanilla Custard, 80
+3, 1.00, Chocolate, Standard Chocolate Flavor, 80
+4, 1.00, Strawberry, Standard Strawberry Flavor, 80
+5, 1.00, Orange Sherbet, Standard Orange Flavor, 80
+6, 1.00, Peppermint, Peppermint Flavor with small bits of candy cane, 80
+7, 1.00, Butter Pecan, Cream flavor with real chopped pecans, 80
+8, 1.00, Cookies & Cream, Cream flavor with broken bits of cookie, 80
+9, 1.00, Chocolate Chunk, Cream flavor with broken bits of dark chocolate, 80
+10, 1.15, Zombie Brain, Lime Sherbet with, 80
+11, 1.15, Pluto Crunch, Purple multi-berry flavored ice cream with almonds, 80
+12, 1.15, Anteater Surprise, Vanilla Ice Cream with mixed chocolate sprinkles, 80
+13, 1.15, Habanero Hotspot, Red Raspberry with bits of cinnamon candy, 80
+14, 1.15, Peanut Butter Ripple, Cream with Peanut Butter Syrup swirled, 80
+15, 1.15, Dream Cooler, Cream with Orange Syrup Swirled, 80
+16, 1.15, Lemon Sherbet, Standard Lemon Flavor, 80
