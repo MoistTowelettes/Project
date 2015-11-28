@@ -92,4 +92,8 @@ public class IceCreamMain {
             System.out.println("ICE CREAM FILE NOT FOUND");
         }
     }
+
+    public String toString(){
+        return name;
+    }
 }

@@ -170,4 +170,9 @@ public class Customer {
         System.out.println("Happiness level: " + this.levelOfHappiness);
         System.out.println("Money: " + this.wallet);
     }
+
+    public String toString(){
+        return name;
+    }
+
 }

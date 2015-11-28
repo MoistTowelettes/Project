@@ -211,5 +211,8 @@ public class Worker {
     
         //abstract method.
     }
-    
+
+    public String toString(){
+        return this.workerName;
+    }
 }
