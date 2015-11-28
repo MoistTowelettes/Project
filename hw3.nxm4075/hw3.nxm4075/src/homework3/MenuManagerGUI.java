@@ -121,7 +121,8 @@ public class MenuManagerGUI extends Application {
         tasksMenu.getItems().addAll(tasksPayOrder, tasksPlaceOrder,
                 tasksActiveCashier, tasksActiveStocker, tasksCashierOnBreak,
                 tasksStockerOnBreak);
-        
+        //taskmenue action
+        tasksMenu.setOnAction(e->stage.setScene(task_menu()));
         //Charts Menu
         Menu chartsMenu = new Menu("Charts");
         MenuItem chartsHappinessPie = new MenuItem("Happiness Pie Chart");
@@ -605,4 +606,237 @@ public class MenuManagerGUI extends Application {
         return box;
     }
     */
+
+
+
+    private Scene task_menu(){
+        BorderPane pane = new BorderPane();
+        GridPane grid= new GridPane();
+        pane.setTop(menubar);
+        Button button = new Button("Submit");
+
+
+        Label label = new Label("Select a task!");
+        ChoiceBox<String> check = new ChoiceBox<>();
+        check.getItems().add("Pay Order");
+        check.getItems().add("Place Order");
+        check.getItems().add("Active Cashier");
+        check.getItems().add("Active Stocker");
+        check.getItems().add("Cashier on Break");
+        check.getItems().add("Stocker on Break");
+
+
+
+        grid.add(label, 0,0);
+        grid.add(check, 1,0);
+        grid.add(button,2,0);
+
+
+
+
+        button.setOnAction(e->pane.setCenter(check_task(check.getValue())));
+        pane.setCenter(grid);
+        Scene scene = new Scene(pane,stage.getHeight(),stage.getWidth());
+        return scene;
+    }
+
+    private GridPane pay_order(){
+        GridPane grid = new GridPane();
+        Button button = new Button("Submit");
+
+
+
+        Label label = new Label("Pay Order:");
+        ChoiceBox<Order> choice = new ChoiceBox();
+        for(int x=0;x<shopper.orderList.size();x++)choice.getItems().add(shopper.orderList.get(x));
+
+
+        button.setOnAction(e->{
+
+
+
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return grid;
+    }
+
+
+    private GridPane place_order(){
+        GridPane grid = new GridPane();
+        Button button = new Button("Submit");
+
+
+
+        Label label = new Label("Pay Order:");
+        ChoiceBox<Order> choice = new ChoiceBox();
+        for(int x=0;x<shopper.orderList.size();x++)choice.getItems().add(shopper.orderList.get(x));
+
+
+        button.setOnAction(e->{
+
+
+
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return grid;
+    }
+    private GridPane active_cashier(){
+        GridPane grid = new GridPane();
+        Button button = new Button("Submit");
+
+
+
+        Label label = new Label("Pay Order:");
+        ChoiceBox<Order> choice = new ChoiceBox();
+        for(int x=0;x<shopper.orderList.size();x++)choice.getItems().add(shopper.orderList.get(x));
+
+
+        button.setOnAction(e->{
+
+
+
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return grid;
+    }
+
+    private GridPane active_stocker(){
+        GridPane grid = new GridPane();
+        Button button = new Button("Submit");
+
+
+        Label label = new Label(" Set Stocker Active:");
+        ChoiceBox<Stocker> choice = new ChoiceBox();
+        for(int x=0;x<worker.size();x++){
+            if(worker.get(x).typeOfWorker.equals("Stocker"))choice.getItems().add((Stocker)worker.get(x));
+
+        }
+
+
+        button.setOnAction(e->{
+            if(choice.getValue()!=null){
+                if(choice.getValue().getActive())
+                    choice.getValue().setActive();
+                else choice.getValue().setActive();
+            }
+
+            stage.setScene(task_menu());
+
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return grid;
+    }
+
+    private GridPane set_cashier_break(){
+        GridPane grid = new GridPane();
+        Button button = new Button("Submit");
+
+
+
+        Label label = new Label(" Set Cashier On Break:");
+        ChoiceBox<Cashier> choice = new ChoiceBox();
+        for(int x=0;x<worker.size();x++){
+            if(worker.get(x).typeOfWorker.equals("Cashier"))choice.getItems().add((Cashier)worker.get(x));
+
+        }
+
+
+        button.setOnAction(e->{
+            if(choice.getValue()!=null){
+                if(choice.getValue().getOnBreak())
+                    choice.getValue().onBreak=false;
+                else choice.getValue().onBreak=true;}
+
+            stage.setScene(task_menu());
+
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return grid;
+    }
+
+
+
+    private GridPane set_stocker_break(){
+        GridPane grid = new GridPane();
+        Button button = new Button("Submit");
+
+
+
+        Label label = new Label(" Set Stocker On Break:");
+        ChoiceBox<Stocker> choice = new ChoiceBox();
+        for(int x=0;x<worker.size();x++)if(worker.get(x).typeOfWorker.equals("Stocker"))choice.getItems().add((Stocker)worker.get(x));
+
+
+        button.setOnAction(e->{
+            if(choice.getValue()!=null){
+                if(choice.getValue().getOnBreak())
+                    choice.getValue().onBreak=false;
+                else choice.getValue().onBreak=true;}
+
+            stage.setScene(task_menu());
+
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return grid;
+    }
+
+
+    private GridPane check_task(String str){
+        switch(str){
+            case "Pay Order":return pay_order();
+            case "Place Order":return place_order();
+            case "Active Cashier":return active_cashier();
+            case "Active Stocker": return active_stocker();
+            case "Cashier on Break":return set_cashier_break();
+            case "Stocker on Break":return set_stocker_break();
+        }
+        return new GridPane();
+    }
+
+
+
+
+
 }
