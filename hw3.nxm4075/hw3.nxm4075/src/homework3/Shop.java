@@ -3,6 +3,7 @@ package homework3;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.File;
 
 /**
  *
@@ -23,6 +24,10 @@ public class Shop {
     ArrayList <Customer> customerList = new ArrayList<>();
     ArrayList <Worker> workerList = new ArrayList<>();
     ArrayList <Order> orderList = new ArrayList<>();
+
+    IceCreamMain ic = new IceCreamMain();
+    Worker wor = new Worker();
+    Customer cus = new Customer();
     
     IceCreamCone icc;
     IceCreamSundae ics;
@@ -38,71 +43,18 @@ public class Shop {
     CashRegister cr = new CashRegister();
     
     //Fills the data in the ArrayList of the Customer Class.
-    public void createCustomerArrayList(){
-        
-        Customer cus = new Customer();
-        customerList = cus.getCustomerList();
+    public void createCustomerArrayList(File file){
+        customerList = cus.getCustomerList(file);
     } 
     
     //Fills the data in the ArrayList of the Worker Class.
-    public void createWorkerArrayList(){
-        
-        Worker wor = new Worker();
-        workerList = wor.getWorkerList();
+    public void createWorkerArrayList(File file){
+        workerList = wor.getWorkerList(file);
     }
     
     //Fills the data in the ArrayList of the Ice Cream Class.
-    public void createIceCreamArrayList(){
-        
-        IceCreamMain ic = new IceCreamMain();
-        iceCreamList = ic.getIceCreamList();
-    }
-
-    //Creates String of all Ice Cream
-    public String makeIceCreamString() {
-        String icString = "";
-        int icLen  = iceCreamList.size();
-
-        for (int i = 0; i < icLen; i++) {
-            icString += iceCreamList.get(i).idNumber + ".\n";
-            icString += "Price:\n$" + String.format("%.2f", iceCreamList.get(i).price) + "\n";
-            icString += "Flavor:\n" + iceCreamList.get(i).name + "\n";
-            icString += "Description:\n" + iceCreamList.get(i).description + "\n";
-            icString += "Scoops:\n" + iceCreamList.get(i).GallonsIC + "\n\n";
-        }
-
-        return icString;
-    }
-
-    //Creates a String of all Workers
-    public String makeWorkerString() {
-        String wString = "";
-        int wLen  = workerList.size();
-
-        for (int i = 0; i < wLen; i++) {
-            wString += "ID:\n" + workerList.get(i).idNumber + "\n";
-            wString += "Name:\n" + workerList.get(i).workerName + "\n";
-            wString += "Customers Served:\n" + workerList.get(i).customerServed + "\n";
-            wString += "Scoops Served:\n" + workerList.get(i).scoopsServed + "\n";
-            wString += "Money Taken:\n$" + String.format("%.2f", workerList.get(i).moneyTaken) + "\n\n";
-        }
-
-        return wString;
-    }
-
-    //Creates a String of all Customers
-    public String makeCustomerString() {
-        String cString = "";
-        int wLen  = customerList.size();
-
-        for (int i = 0; i < wLen; i++) {
-            cString += "ID:\n" + customerList.get(i).idNumber + "\n";
-            cString += "Name:\n" + customerList.get(i).name + "\n";
-            cString += "Happiness:\n" + customerList.get(i).levelOfHappiness + "\n";
-            cString += "Wallet:\n$" + String.format("%.2f", customerList.get(i).wallet) + "\n\n";
-        }
-
-        return cString;
+    public void createIceCreamArrayList(File file){
+        iceCreamList = ic.getIceCreamList(file);
     }
     
     //Creates an ArrayList for the order.
@@ -148,12 +100,12 @@ public class Shop {
         orderList.get(orderSelect).w.moneyTaken += price;
         orderList.get(orderSelect).w.scoopsServed += orderList.get(orderSelect).servings.size();
         orderList.get(orderSelect).w.customerServed +=1;
-        orderList.get(orderSelect).w.updateFile();
+        //orderList.get(orderSelect).w.updateFile();
         cr.ShopMoney += price;
         orderList.get(orderSelect).status = true;
         orderList.get(orderSelect).c.levelOfHappiness +=1;
         orderList.get(orderSelect).c.wallet -=price;
-        orderList.get(orderSelect).c.updateFile();
+        //orderList.get(orderSelect).c.updateFile();
         
         /*
         
@@ -179,7 +131,7 @@ public class Shop {
         
             for(int j = 0; j < orderList.get(orderSelect).servings.get(i).iceCreamNumber.size(); j++){
             
-                iceCreamList.get((int) orderList.get(orderSelect).servings.get(i).iceCreamNumber.get(j)).GallonsIC--;
+                iceCreamList.get((int) orderList.get(orderSelect).servings.get(i).iceCreamNumber.get(j)).gallonsIC--;
             }
         }
     }
@@ -196,7 +148,7 @@ public class Shop {
             orderList.get(orderSelect).c.t.pennies -= t.pennies;
             orderList.get(orderSelect).c.t.nickels -= t.nickels;
             orderList.get(orderSelect).c.t.dimes -= t.dimes;
-            orderList.get(orderSelect).c.t.quaters -= t.quaters;
+            orderList.get(orderSelect).c.t.quarters -= t.quarters;
             orderList.get(orderSelect).c.t.ones -= t.ones;
             orderList.get(orderSelect).c.t.fives -= t.fives;
             orderList.get(orderSelect).c.t.tens -= t.tens;
@@ -227,8 +179,8 @@ public class Shop {
             }
             while(amountReturned >= 0.25){
 
-                --cr.t.quaters;
-                ++orderList.get(orderSelect).c.t.quaters;
+                --cr.t.quarters;
+                ++orderList.get(orderSelect).c.t.quarters;
                 amountReturned -= 0.25;
             }
             while(amountReturned >= 0.1){
@@ -281,7 +233,7 @@ public class Shop {
         System.out.printf("\nPennies: %d" ,orderList.get(orderSelect).c.t.pennies);
         System.out.printf("\nNickels: %d" ,orderList.get(orderSelect).c.t.nickels);
         System.out.printf("\nDimes: %d" ,orderList.get(orderSelect).c.t.dimes);
-        System.out.printf("\nQuaters: %d" ,orderList.get(orderSelect).c.t.quaters);
+        System.out.printf("\nQuaters: %d" ,orderList.get(orderSelect).c.t.quarters);
         System.out.printf("\nOnes: %d" ,orderList.get(orderSelect).c.t.ones);
         System.out.printf("\nFives: %d" ,orderList.get(orderSelect).c.t.fives);
         System.out.printf("\nTens: %d" ,orderList.get(orderSelect).c.t.tens);
@@ -294,7 +246,7 @@ public class Shop {
         System.out.printf("\nPennies: %d" ,cr.t.pennies);
         System.out.printf("\nNickels: %d" ,cr.t.nickels);
         System.out.printf("\nDimes: %d" ,cr.t.dimes);
-        System.out.printf("\nQuaters: %d" ,cr.t.quaters);
+        System.out.printf("\nQuaters: %d" ,cr.t.quarters);
         System.out.printf("\nOnes: %d" ,cr.t.ones);
         System.out.printf("\nFives: %d" ,cr.t.fives);
         System.out.printf("\nTens: %d" ,cr.t.tens);
@@ -314,7 +266,7 @@ public class Shop {
         
             if((workerList.get(i).typeOfWorker.equals("Stocker")) & !(workerList.get(i).getOnBreak())){
                 
-                iceCreamList.get(option).GallonsIC = 80;
+                iceCreamList.get(option).gallonsIC = 80;
                 workerList.get(i).setStamina(-1);
                 if(workerList.get(i).getStamina() == 0){
                 
@@ -356,7 +308,7 @@ public class Shop {
             }
             int iceCreamOption = input.nextInt();
             iceCreamOption--;
-            if(iceCreamList.get(iceCreamOption).GallonsIC > 0 ){
+            if(iceCreamList.get(iceCreamOption).gallonsIC > 0 ){
                 serv.flavors[j] = iceCreamList.get(iceCreamOption);
                 serv.iceCreamNumber.add(iceCreamOption);
             }
@@ -390,5 +342,12 @@ public class Shop {
         
         if(n==0) return false;
         else return true;
+    }
+
+    //saves all files
+    public void saveAllFiles() {
+        ic.saveIceCream(iceCreamList);
+        wor.saveWorker(workerList);
+        cus.saveCustomer(customerList);
     }
 }

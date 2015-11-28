@@ -44,13 +44,14 @@ public class MenuManager {
     public void go(){
         boolean loop = true;
         //Referencing the ArrayList in the menuManger to the ones in shop (SubController)
+        /*
         shopper.createCustomerArrayList();
         customer = shopper.customerList;
         shopper.createWorkerArrayList();
         worker = shopper.workerList;
         shopper.createIceCreamArrayList();
         IceCreamList = shopper.iceCreamList;
-        
+        */
         while(loop){
             
             System.out.printf("\nIce Cream Main Menu");
@@ -210,7 +211,7 @@ public class MenuManager {
                     break;
                 case 4:
                     shopper.serv = new RootBeerFloat();
-                    if(shopper.iceCreamList.get(0).GallonsIC > 0)
+                    if(shopper.iceCreamList.get(0).gallonsIC > 0)
                         shopper.servingList.add(shopper.serv);
                     else{
                         shopper.customerList.get(customerOption).levelOfHappiness -=2;
@@ -281,8 +282,8 @@ public class MenuManager {
                             tran.nickels = keyboard.nextInt();
                             System.out.printf("\nDimes : ", shopper.orderList.get(orderSelect).c.t.dimes);
                             tran.dimes = keyboard.nextInt();
-                            System.out.printf("\nQuaters : ", shopper.orderList.get(orderSelect).c.t.quaters);
-                            tran.quaters = keyboard.nextInt();
+                            System.out.printf("\nQuaters : ", shopper.orderList.get(orderSelect).c.t.quarters);
+                            tran.quarters = keyboard.nextInt();
                             System.out.printf("\nOnes ", shopper.orderList.get(orderSelect).c.t.ones);
                             tran.ones = keyboard.nextInt();
                             System.out.printf("\nFives : ", shopper.orderList.get(orderSelect).c.t.fives);
@@ -532,7 +533,7 @@ public class MenuManager {
                 for(int i = 0; i < shopper.iceCreamList.size(); i++){
                 
             
-                System.out.println(i+1 + ". " + shopper.iceCreamList.get(i).name + "  " + shopper.iceCreamList.get(i).GallonsIC);
+                System.out.println(i+1 + ". " + shopper.iceCreamList.get(i).name + "  " + shopper.iceCreamList.get(i).gallonsIC);
             }
         }
 
@@ -551,7 +552,7 @@ public class MenuManager {
                 System.out.println("Setting all the values of amount of Ice Cream to 0");
                 
                 for(int i = 0; i < shopper.iceCreamList.size(); i++)
-                    shopper.iceCreamList.get(i).GallonsIC = 0;
+                    shopper.iceCreamList.get(i).gallonsIC = 0;
                 break;
             
             case 2:

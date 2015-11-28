@@ -25,10 +25,9 @@ public class Customer {
     double wallet;
     // to store the number of coins.
     Transaction t = new Transaction();
-    //File name of the file i'm reading.
-    static String FILENAME = "customerFile.txt";
     //created a variable to keep count of the file that is being used and delete the previous one.
     static int n = 1;
+    File customerFile;
     
 
     //This is the constructor. Constructors are called every time an object
@@ -41,14 +40,16 @@ public class Customer {
     }
     
     
-     public ArrayList<Customer> getCustomerList(){
+     public ArrayList<Customer> getCustomerList(File customerFile){
         
         String line;
         String tokens[];
-        File customerFile = new File(FILENAME);
+        //File customerFile = new File(FILENAME);
         ArrayList <Customer> cusList = new ArrayList<>();
         try {
-            Scanner inputCustomer=new Scanner(customerFile);
+            this.customerFile = customerFile;
+            Scanner inputCustomer = new Scanner(customerFile);
+            System.out.println("Successfully loaded file");
             while (inputCustomer.hasNextLine())
             {
                 line=inputCustomer.nextLine();
@@ -62,7 +63,7 @@ public class Customer {
                 cus.t.pennies = parseInt(tokens[4]);
                 cus.t.nickels = parseInt(tokens[5]);
                 cus.t.dimes = parseInt(tokens[6]);
-                cus.t.quaters = parseInt(tokens[7]);
+                cus.t.quarters = parseInt(tokens[7]);
                 cus.t.ones = parseInt(tokens[8]);
                 cus.t.fives = parseInt(tokens[9]);
                 cus.t.tens = parseInt(tokens[10]);
@@ -77,9 +78,39 @@ public class Customer {
         //Returning the arrayList to the sub-controller.
         return cusList;
     }
-     
-    
-    public void updateFile() throws FileNotFoundException{
+
+    //save customer file
+    public void saveCustomer(ArrayList<Customer> customer) {
+        int workerLen = customer.size();
+        //File iceCreamFile = new File("CustomerFile.txt");
+        try {
+            Formatter myFormatter = new Formatter(customerFile);
+            for (int i = 0; i < workerLen; i++) {
+                if (i != workerLen-1) {
+                    myFormatter.format("%s, %s, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", customer.get(i).idNumber,
+                            customer.get(i).name, customer.get(i).wallet, customer.get(i).levelOfHappiness,
+                            customer.get(i).t.pennies, customer.get(i).t.nickels, customer.get(i).t.dimes,
+                            customer.get(i).t.quarters, customer.get(i).t.ones,
+                            customer.get(i).t.fives, customer.get(i).t.tens,
+                            customer.get(i).t.twenties);
+                }
+                else {
+                    myFormatter.format("%s, %s, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d", customer.get(i).idNumber,
+                            customer.get(i).name, customer.get(i).wallet, customer.get(i).levelOfHappiness,
+                            customer.get(i).t.pennies, customer.get(i).t.nickels, customer.get(i).t.dimes,
+                            customer.get(i).t.quarters, customer.get(i).t.ones,
+                            customer.get(i).t.fives, customer.get(i).t.tens,
+                            customer.get(i).t.twenties);
+                }
+            }
+            myFormatter.close();
+        }
+        catch (FileNotFoundException ex) {
+            System.out.println("CUSTOMER FILE NOT FOUND");
+        }
+    }
+
+    /*public void updateFile() throws FileNotFoundException{
         
         //creating a new file to write the data in.
         File f = new File("customerFile(" + n + ").txt");
@@ -103,7 +134,7 @@ public class Customer {
                 tokens[4] = String.valueOf(this.t.pennies);
                 tokens[5] = String.valueOf(this.t.nickels);
                 tokens[6] = String.valueOf(this.t.dimes);
-                tokens[7] = String.valueOf(this.t.quaters);
+                tokens[7] = String.valueOf(this.t.quarters);
                 tokens[8] = String.valueOf(this.t.ones);
                 tokens[9] = String.valueOf(this.t.fives);
                 tokens[10] = String.valueOf(this.t.tens);
@@ -130,7 +161,7 @@ public class Customer {
         //Deleting the previous file.
         customerFile.delete();
         
-    }
+    }*/
     
     public void displayDetails(){
     
@@ -139,4 +170,9 @@ public class Customer {
         System.out.println("Happiness level: " + this.levelOfHappiness);
         System.out.println("Money: " + this.wallet);
     }
+
+    public String toString(){
+        return name;
+    }
+
 }

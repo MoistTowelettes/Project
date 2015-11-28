@@ -1,3 +1,0 @@
-2001, Groucho, 0, 0, 0.0, Worker
-2002, Chico, 0, 0, 0.0, Stocker
-2003, Harpo, 150, 450, 0.0, Cashier

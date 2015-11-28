@@ -22,7 +22,7 @@ public class CashRegister {
         t.pennies = 50;
         t.nickels = 40;
         t.dimes = 50;
-        t.quaters = 40;
+        t.quarters = 40;
         t.ones = 10;
         t.fives = 2;
         t.tens = 1;
@@ -49,7 +49,7 @@ public class CashRegister {
         this.t.pennies += t.pennies;
         this.t.nickels += t.nickels;
         this.t.dimes += t.dimes;
-        this.t.quaters += t.quaters;
+        this.t.quarters += t.quarters;
         this.t.ones += t.ones;
         this.t.fives += t.fives;
         this.t.tens += t.tens;
@@ -61,7 +61,7 @@ public class CashRegister {
         t.pennies = 50;
         t.nickels = 40;
         t.dimes = 50;
-        t.quaters = 40;
+        t.quarters = 40;
         t.ones = 10;
         t.fives = 2;
         t.tens = 1;

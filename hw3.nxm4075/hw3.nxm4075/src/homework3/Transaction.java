@@ -11,12 +11,12 @@ package homework3;
  */
 public class Transaction {
     
-    int pennies, dimes, nickels, quaters, ones, fives, tens, twenties;
+    int pennies, dimes, nickels, quarters, ones, fives, tens, twenties;
 
     //Calculate the amount the customer has paid
     public double calAmountPaid(){
 
-        double money = (this.pennies / 100) + (this.nickels / 20) + (this.dimes / 10) + (this.quaters / 4) + this.ones + this.fives*5 + this.tens*10 + this.twenties*20;
+        double money = (this.pennies / 100) + (this.nickels / 20) + (this.dimes / 10) + (this.quarters / 4) + this.ones + this.fives*5 + this.tens*10 + this.twenties*20;
 
         return money;
     }

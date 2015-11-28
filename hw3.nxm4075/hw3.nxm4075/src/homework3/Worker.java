@@ -26,7 +26,7 @@ public class Worker {
     long scoopsServed;
     double moneyTaken;
     String typeOfWorker;
-    
+    File workerFile;
     
     public Worker(){
 
@@ -45,14 +45,16 @@ public class Worker {
      * stored in the worker array list within the sub-controller (shop);
      * @return 
      */
-    public ArrayList<Worker> getWorkerList(){
+    public ArrayList<Worker> getWorkerList(File workerFile){
         
-        File workerFile = new File(FILENAME);
+        //File workerFile = new File(FILENAME);
         String line;
         String tokens[];
         ArrayList <Worker> worList = new ArrayList<>();
         try {
-            Scanner inputWorker=new Scanner(workerFile);
+            this.workerFile = workerFile;
+            Scanner inputWorker = new Scanner(workerFile);
+            System.out.println("Successfully loaded file");
             while (inputWorker.hasNextLine()){
                 line=inputWorker.nextLine();
                 tokens=line.split(", ");
@@ -72,6 +74,29 @@ public class Worker {
             Logger.getLogger(Customer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return worList;
+    }
+
+    public void saveWorker(ArrayList<Worker> worker) {
+        int workerLen = worker.size();
+        try {
+            Formatter myFormatter = new Formatter(workerFile);
+            for (int i = 0; i < workerLen; i++) {
+                if (i != workerLen-1) {
+                    myFormatter.format("%s, %s, %d, %d, %s, %s\n", worker.get(i).idNumber, worker.get(i).workerName,
+                            worker.get(i).scoopsServed, worker.get(i).customerServed, worker.get(i).moneyTaken,
+                            worker.get(i).getClass().getSimpleName());
+                }
+                else {
+                    myFormatter.format("%s, %s, %d, %d, %s, %s", worker.get(i).idNumber, worker.get(i).workerName,
+                            worker.get(i).scoopsServed, worker.get(i).customerServed, worker.get(i).moneyTaken,
+                            worker.get(i).getClass().getSimpleName());
+                }
+            }
+            myFormatter.close();
+        }
+        catch (FileNotFoundException ex) {
+            System.out.println("WORKER FILE NOT FOUND");
+        }
     }
     
     public Worker checkForWorkerType(String type){
@@ -97,7 +122,7 @@ public class Worker {
      * less amount of coins and total money with him now.
      * @throws FileNotFoundException 
      */
-    public void updateFile() throws FileNotFoundException{
+    /*public void updateFile() throws FileNotFoundException{
     
         n++;
         File f = new File("workerFile(" + n +").txt");
@@ -132,7 +157,7 @@ public class Worker {
         myFormatter.close();
         inputWorker.close();
         workerFile.delete();
-    }
+    }*/
     
     public void displayDetails(){
     
@@ -186,5 +211,8 @@ public class Worker {
     
         //abstract method.
     }
-    
+
+    public String toString(){
+        return this.workerName;
+    }
 }
