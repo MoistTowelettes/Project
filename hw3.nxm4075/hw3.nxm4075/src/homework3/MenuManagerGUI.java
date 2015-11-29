@@ -642,6 +642,10 @@ public class MenuManagerGUI extends Application {
 
     private GridPane pay_order(){
         GridPane grid = new GridPane();
+        if(shopper.orderList.isEmpty()){
+            grid.add(new Label("No order created!"),0,0);
+            return grid;
+        }
         Button button = new Button("Submit");
 
 
@@ -699,18 +703,23 @@ public class MenuManagerGUI extends Application {
         Button button = new Button("Submit");
 
 
+        Label label = new Label(" Set Cashier Active");
+        ChoiceBox<Cashier> choice = new ChoiceBox();
+        for(int x=0;x<worker.size();x++){
+            if(worker.get(x).typeOfWorker.equals("Cashier"))choice.getItems().add((Cashier)worker.get(x));
 
-        Label label = new Label("Pay Order:");
-        ChoiceBox<Order> choice = new ChoiceBox();
-        for(int x=0;x<shopper.orderList.size();x++)choice.getItems().add(shopper.orderList.get(x));
+        }
 
 
         button.setOnAction(e->{
+            if(choice.getValue()!=null) {
 
+                choice.getValue().setActive();
+            }
 
+            stage.setScene(task_menu());
 
         });
-
 
 
         grid.add(label,0,0);
@@ -736,9 +745,8 @@ public class MenuManagerGUI extends Application {
 
         button.setOnAction(e->{
             if(choice.getValue()!=null){
-                if(choice.getValue().getActive())
+               
                     choice.getValue().setActive();
-                else choice.getValue().setActive();
             }
 
             stage.setScene(task_menu());
