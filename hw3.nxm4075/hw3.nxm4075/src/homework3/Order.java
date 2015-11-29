@@ -1,6 +1,7 @@
 package homework3;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -25,8 +26,15 @@ public class Order {
         status = false;
         System.out.printf("Created %s\n", getClass().getSimpleName());
     }
-    
-
+    //i've decided to overload to make my life easier since it wasn't done the first time
+    public Order (Customer cus, Worker work, ArrayList<Serving> serv,Random num){
+        this.c =cus;
+        this.w=work;
+        this.servings=serv;
+        this.orderNumber=num.nextInt(1000);
+        this.status=false;
+        num.setSeed(this.orderNumber);
+    }
     //This function, when called, will print a report to the screen.
     public String display(){
 
@@ -40,4 +48,9 @@ public class Order {
 
         this.orderNumber = orderNumber;
     }
+    public String toString(){
+        return orderNumber+"";
+    }
+
+
 }

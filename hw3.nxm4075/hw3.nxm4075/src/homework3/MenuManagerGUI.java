@@ -28,6 +28,7 @@ import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import java.util.Random;
 
 public class MenuManagerGUI extends Application {
 
@@ -38,7 +39,8 @@ public class MenuManagerGUI extends Application {
     //added
     private static Stage stage;
     private static MenuBar menubar;
-
+    //for order num
+    Random rand = new Random(1000);
 
     public MenuManagerGUI() {
         customer = new ArrayList<>();
@@ -625,7 +627,7 @@ public class MenuManagerGUI extends Application {
         check.getItems().add("Cashier on Break");
         check.getItems().add("Stocker on Break");
 
-
+        check.setValue("Pay Order");
 
         grid.add(label, 0,0);
         grid.add(check, 1,0);
@@ -674,28 +676,90 @@ public class MenuManagerGUI extends Application {
 
     private GridPane place_order(){
         GridPane grid = new GridPane();
+        if(customer.isEmpty()){
+            Label temp = new Label("No Customer Created");
+            grid.add(temp,0,0);
+            return grid;
+        }else if(worker.isEmpty()){
+            Label temp = new Label("No Worker Created");
+            grid.add(temp,0,0);
+            return grid;
+        }else if(shopper.servingList.isEmpty()) {
+            Label temp = new Label("No Serving Created");
+            grid.add(temp, 0, 0);
+            return grid;
+        }
+
+
         Button button = new Button("Submit");
 
 
 
-        Label label = new Label("Pay Order:");
-        ChoiceBox<Order> choice = new ChoiceBox();
-        for(int x=0;x<shopper.orderList.size();x++)choice.getItems().add(shopper.orderList.get(x));
+
+        Label wl= new Label("Worker");
+        ChoiceBox<Worker> wc = new ChoiceBox<>();
+        for(int x=0;x<worker.size();x++){
+
+            if(worker.get(x).typeOfWorker!="Stocker" && !worker.get(x).getOnBreak()) {
+                wc.getItems().add(worker.get(x));
+                wc.setValue(worker.get(x));
+            }
+        }
+        grid.add(wl,0,0);
+        grid.add(wc,1,0);
+
+
+
+
+        Label cl = new Label("Customer");
+        ChoiceBox<Customer> cc = new ChoiceBox<>();
+        for(int x=0;x<worker.size();x++){
+
+                cc.getItems().add(customer.get(x));
+        }
+
+
+        grid.add(cl,0,1);
+        grid.add(cc,1,1);
+
+
+
+
+            Label sl = new Label("Serving");
+            VBox items = new VBox();
+            ArrayList<CheckBox> check = new ArrayList<>();
+            for (int x = 0; x < shopper.servingList.size(); x++) {
+                //Color col= new Color(1,1,0,1);
+                CheckBox cb = new CheckBox(shopper.servingList.get(x).toString());
+                cb.setUserData(shopper.servingList.get(x));
+                //cb.setTextFill(col);
+
+                check.add(cb);
+            }
+                for (int x = 0; x < check.size(); x++) items.getChildren().add(check.get(x));
+
+            grid.add(items, 1, 2);
+
+
 
 
         button.setOnAction(e->{
+            if(wc.getValue()!=null || cc.getValue()!=null) {
+                ArrayList<Serving> serv = new ArrayList<>();
+                for (int x = 0; x < check.size(); x++) {
+                    if (check.get(x).isSelected()) serv.add((Serving) check.get(x).getUserData());
+                }
 
-
-
+                shopper.orderList.add(new Order(cc.getValue(), wc.getValue(), serv, rand));
+            }
+            stage.setScene(task_menu());
         });
 
 
 
-        grid.add(label,0,0);
-        grid.add(choice, 1, 0);
-        grid.add(button,2,0);
-
-
+        grid.add(button,1 ,3);
+        grid.setTranslateX(100);
+        grid.setTranslateY(50);
         return grid;
     }
     private GridPane active_cashier(){
@@ -745,7 +809,7 @@ public class MenuManagerGUI extends Application {
 
         button.setOnAction(e->{
             if(choice.getValue()!=null){
-               
+
                     choice.getValue().setActive();
             }
 

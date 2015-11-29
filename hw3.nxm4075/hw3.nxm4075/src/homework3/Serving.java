@@ -25,7 +25,10 @@ public class Serving {
         //System.out.printf("Created %s\n",getClass().getSimpleName());
     }
     //This function, when called, will print a report to the screen.
-    
+    public Serving(String type){
+        this.typeofServing=type;
+        overallPrice=100;
+    }
     public String display(){
 
         String result=""; 
@@ -77,5 +80,9 @@ public class Serving {
     public void setNuts(boolean value){
     
         //abstract mathod.
+    }
+
+    public String toString(){
+        return this.typeofServing;
     }
 }
