@@ -1,6 +1,8 @@
 package homework3;
 
 import java.io.File;
+
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -14,11 +16,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import java.util.ArrayList;
+import java.util.Random;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
@@ -28,6 +29,7 @@ import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import sun.reflect.annotation.ExceptionProxy;
 
 public class MenuManagerGUI extends Application {
 
@@ -38,6 +40,7 @@ public class MenuManagerGUI extends Application {
     //added
     private static Stage stage;
     private static MenuBar menubar;
+    Random rand = new Random(1000);
 
 
     public MenuManagerGUI() {
@@ -50,26 +53,32 @@ public class MenuManagerGUI extends Application {
     public void setShopcontroller(Shop shopcontroller){
         this.shopper = shopcontroller;
     }
-    
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.stage=primaryStage;
+        stage.setScene(primaryStage());
+        stage.show();
+    }
+
+    public Scene primaryStage() {
         BorderPane layout;
 
-        primaryStage.setTitle("Honey Badger Ice Cream Parlor");
+        stage.setTitle("Honey Badger Ice Cream Parlor");
         
         //File menu
         Menu fileMenu = new Menu("File");
         MenuItem fileIceCream = new MenuItem("Ice Cream");
         fileIceCream.setOnAction((ActionEvent event) -> {
-            iceCreamFileChooser(primaryStage);
+            iceCreamFileChooser(stage);
         });
         MenuItem fileWorkers = new MenuItem("Workers");
         fileWorkers.setOnAction((ActionEvent event) -> {
-            workerFileChooser(primaryStage);
+            workerFileChooser(stage);
         });
         MenuItem fileCustomers = new MenuItem("Customers");
         fileCustomers.setOnAction((ActionEvent event) -> {
-            customerFileChooser(primaryStage);
+            customerFileChooser(stage);
         });
         Menu fileSave = new Menu("Save");
         MenuItem saveAll = new MenuItem("Save All");
@@ -91,33 +100,68 @@ public class MenuManagerGUI extends Application {
         fileSave.getItems().addAll(saveAll, saveIceCream, saveWorkers, saveCustomers);
         MenuItem fileExit = new MenuItem("Exit");
         fileExit.setOnAction((ActionEvent event) -> {
-            primaryStage.close();
+            stage.close();
         });
         fileMenu.getItems().addAll(fileIceCream, fileWorkers, fileCustomers, fileSave, fileExit);
         
         //Create Menu
         Menu createMenu = new Menu("Create");
         MenuItem createIceCream = new MenuItem("Create Ice Cream");
+        createIceCream.setOnAction(e -> {
+            stage.setScene(new Scene(createIceCream(), 400, 350));
+        });
         MenuItem createWorker = new MenuItem("Create Worker");
+        createWorker.setOnAction(e -> {
+            stage.setScene(new Scene(createWorker(), 400, 350));
+        });
         MenuItem createCustomer = new MenuItem("Create Customer");
+        createCustomer.setOnAction(e -> {
+            stage.setScene(new Scene(createCustomer(), 400, 350));
+        });
         createMenu.getItems().addAll(createIceCream, createWorker, createCustomer);
 
         //Update Menu
         Menu updateMenu = new Menu("Update");
         MenuItem updateIceCream = new MenuItem("Update Ice Cream");
+        updateIceCream.setOnAction(e -> {
+            stage.setScene(new Scene(build_ice(), 400, 350));
+        });
         MenuItem updateWorker = new MenuItem("Update Worker");
+        updateWorker.setOnAction(e -> {
+            stage.setScene(new Scene(build_worker(), 400, 350));
+        });
         MenuItem updateCustomer = new MenuItem("Update Customer");
+        updateCustomer.setOnAction(e -> {
+            stage.setScene(new Scene(build_customer(), 400, 350));
+        });
         updateMenu.getItems().addAll(updateIceCream, updateWorker, updateCustomer);
-        updateWorker.setOnAction(e->stage.setScene(update_Menu(/*stage.getHeight(),stage.getWidth()*/)));
 
         //Task Menu
         Menu tasksMenu = new Menu("Tasks");
         MenuItem tasksPayOrder = new MenuItem("Pay Order");
+        tasksPayOrder.setOnAction(e -> {
+            stage.setScene(new Scene(pay_order(), 400, 350));
+        });
         MenuItem tasksPlaceOrder = new MenuItem("Place Order");
+        tasksPlaceOrder.setOnAction(e -> {
+            stage.setScene(new Scene(place_order(), 400, 350));
+        });
         MenuItem tasksActiveCashier = new MenuItem("Active Cashier");
+        tasksActiveCashier.setOnAction(e -> {
+            stage.setScene(new Scene(active_cashier(), 400, 350));
+        });
         MenuItem tasksActiveStocker = new MenuItem("Active Stocker");
+        tasksActiveStocker.setOnAction(e -> {
+            stage.setScene(new Scene(active_stocker(), 400, 350));
+        });
         MenuItem tasksCashierOnBreak = new MenuItem("Cashier on Break");
+        tasksCashierOnBreak.setOnAction(e -> {
+            stage.setScene(new Scene(set_cashier_break(), 400, 350));
+        });
         MenuItem tasksStockerOnBreak = new MenuItem("Stocker on Break");
+        tasksStockerOnBreak.setOnAction(e -> {
+            stage.setScene(new Scene(set_stocker_break(), 400, 350));
+        });
         tasksMenu.getItems().addAll(tasksPayOrder, tasksPlaceOrder,
                 tasksActiveCashier, tasksActiveStocker, tasksCashierOnBreak,
                 tasksStockerOnBreak);
@@ -171,7 +215,6 @@ public class MenuManagerGUI extends Application {
             frame.setVisible(true);
             frame.setSize(500,450);
         });
-
 
         MenuItem chartsHappinessBar = new MenuItem("Happiness Bar Chart");
         chartsHappinessBar.setOnAction((ActionEvent event) -> {
@@ -239,23 +282,16 @@ public class MenuManagerGUI extends Application {
         menuBar = new MenuBar();
         menuBar.getMenus().addAll(fileMenu, createMenu, updateMenu, tasksMenu,
                 chartsMenu, aboutMenu);
+
         this.menubar=menuBar;
 
         layout = new BorderPane();
-        //added
-        this.stage=primaryStage;
-        /*
-        shopper.orderList.add(new Order());
-        shopper.orderList.get(0).c=customer.get(0);
-        shopper.orderList.get(0).w=worker.get(0);
-        shopper.orderList.add(new Order());
-        shopper.orderList.get(1).c=customer.get(2);
-        shopper.orderList.get(1).w=worker.get(2);
-        */
+
         layout.setTop(menuBar);
         Scene scene = new Scene(layout, 400, 350);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        //stage.setScene(scene);
+        //stage.show();
+        return scene;
     }
 
     public void iceCreamFileChooser(Stage stage) {
@@ -299,47 +335,152 @@ public class MenuManagerGUI extends Application {
         }
     }
 
-    private Scene update_Menu(/*Double height,Double width*/){
-        Label option= new Label("Which would you like to update!\n");
-        BorderPane layout=new BorderPane();
-        GridPane grid = new GridPane();
-        DropShadow ds=new DropShadow();
-        ds.setOffsetX(2.0);
-        ds.setOffsetY(3.0);
-        option.setEffect(ds);
-        ChoiceBox<String> choice = new ChoiceBox<>();
-        choice.getItems().addAll("Ice Cream","Worker","Customer","Order","Serving");
-        choice.setValue("Ice Cream");
-        Button button = new Button("Submit");
-        button.setOnAction(e->{
-            option.setVisible(false);
-            button.setVisible(false);
-            choice.setVisible(false);
-            layout.setCenter(submit(choice.getValue()));
+    public BorderPane createIceCream() {
+        BorderPane layout = new BorderPane();
+        GridPane pane = new GridPane();
 
+        pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.setVgap(8);
+        pane.setHgap(10);
 
+        //name
+        Label nameLabel = new Label("Name:");
+        TextField nameText = new TextField();
+        GridPane.setConstraints(nameLabel, 0, 0);
+        GridPane.setConstraints(nameText, 1, 0);
+
+        //price
+        Label priceLabel = new Label("Price:");
+        TextField priceText = new TextField();
+        GridPane.setConstraints(priceLabel, 0, 1);
+        GridPane.setConstraints(priceText, 1, 1);
+
+        //flavor
+        Label flavorLabel = new Label("Flavor:");
+        TextField flavorText = new TextField();
+        GridPane.setConstraints(flavorLabel, 0, 2);
+        GridPane.setConstraints(flavorText, 1, 2);
+
+        //description
+        Label descriptionLabel = new Label("Description:");
+        TextField descriptionText = new TextField();
+        GridPane.setConstraints(descriptionLabel, 0, 3);
+        GridPane.setConstraints(descriptionText, 1, 3);
+
+        //scoops
+        Label scoopLabel = new Label("Number of Scoops:");
+        TextField scoopText = new TextField("80");
+        GridPane.setConstraints(scoopLabel, 0, 4);
+        GridPane.setConstraints(scoopText, 1, 4);
+
+        //Submit
+        Button submit = new Button("Submit");
+        GridPane.setConstraints(submit, 1, 5);
+
+        submit.setOnAction(e -> {
+            shopper.addIceCream(nameText.getText(), priceText.getText(), flavorText.getText(),
+                    descriptionText.getText(), scoopText.getText());
         });
-        grid.add(option,0,0);
-        grid.add(choice, 1, 0);
-        grid.add(button,2,0);
-        grid.setVgap(10.0);
-        grid.setHgap(10.0);
-        grid.setVgap(10.0);
 
-
+        pane.getChildren().addAll(nameLabel, nameText, priceLabel, priceText, flavorLabel, flavorText,
+                descriptionLabel, descriptionText, scoopLabel, scoopText, submit);
 
         layout.setTop(menubar);
-        layout.setCenter(grid);
-        Scene scene = new Scene(layout,393.0,242.0);
-        //scene.getStylesheets().add("/homework3/updatePage.css");
-        return scene;
+        layout.setCenter(pane);
+
+        return layout;
     }
 
-    private GridPane build_ice(){
+    public BorderPane createWorker() {
+        BorderPane layout = new BorderPane();
+        GridPane pane = new GridPane();
+
+        pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.setVgap(8);
+        pane.setHgap(10);
+
+        //name
+        Label nameLabel = new Label("Name:");
+        TextField nameText = new TextField();
+        GridPane.setConstraints(nameLabel, 0, 0);
+        GridPane.setConstraints(nameText,1, 0);
+
+        //Id number
+        Label idLabel = new Label("ID Number:");
+        TextField idText = new TextField();
+        GridPane.setConstraints(idLabel, 0, 1);
+        GridPane.setConstraints(idText, 1, 1);
+
+        //submit
+        Button submit = new Button("Submit");
+        GridPane.setConstraints(submit, 1, 2);
+
+        submit.setOnAction(e -> {
+            shopper.addWorker(nameText.getText(), idText.getText());
+        });
+
+        pane.getChildren().addAll(nameLabel, nameText, idLabel, idText, submit);
+
+        layout.setTop(menubar);
+        layout.setCenter(pane);
+
+        return layout;
+    }
+
+    public BorderPane createCustomer() {
+        BorderPane layout = new BorderPane();
+        GridPane pane = new GridPane();
+
+        pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.setVgap(8);
+        pane.setHgap(10);
+
+        //name
+        Label nameLabel = new Label("Name:");
+        TextField nameText = new TextField();
+        GridPane.setConstraints(nameLabel, 0, 0);
+        GridPane.setConstraints(nameText, 1, 0);
+
+        //id number
+        Label idLabel = new Label("ID Number:");
+        TextField idText = new TextField();
+        GridPane.setConstraints(idLabel, 0, 1);
+        GridPane.setConstraints(idText, 1, 1);
+
+        //level of happiness
+        Label happinessLabel = new Label("Happiness Level:");
+        TextField happinessText = new TextField();
+        GridPane.setConstraints(happinessLabel, 0, 2);
+        GridPane.setConstraints(happinessText, 1, 2);
+
+        //wallet
+        Label walletLabel = new Label("Cash in Wallet:");
+        TextField walletText = new TextField();
+        GridPane.setConstraints(walletLabel, 0, 3);
+        GridPane.setConstraints(walletText, 1, 3);
+
+        //submit
+        Button submit = new Button("Submit");
+        GridPane.setConstraints(submit, 1, 4);
+
+        submit.setOnAction(e -> {
+            shopper.addCustomer(nameText.getText(), idText.getText(), happinessText.getText(), walletText.getText());
+        });
+        pane.getChildren().addAll(nameLabel, nameText, idLabel, idText, happinessLabel, happinessText, walletLabel,
+                walletText, submit);
+
+        layout.setTop(menubar);
+        layout.setCenter(pane);
+
+        return layout;
+    }
+
+    private BorderPane build_ice(){
         Label label1=new Label("Which Ice Cream:");
         Label dlabel= new Label("Description:");
         Label plabel= new Label("Price:");
         Button button=new Button("Submit");
+        BorderPane layout = new BorderPane();
         GridPane pane = new GridPane();
         ChoiceBox<IceCreamMain> choice = new ChoiceBox<>();
         TextField dtext = new TextField();
@@ -354,7 +495,8 @@ public class MenuManagerGUI extends Application {
                 choice.getValue().description=dtext.getText();
                 choice.getValue().price=p;
 
-                stage.setScene(update_Menu(/*stage.getHeight(),stage.getWidth()*/));
+                stage.setScene(primaryStage());
+                //stage.setScene(update_Menu());
             }catch(Exception ex){
                 System.err.println("Please enter a double for price!");
             }
@@ -378,17 +520,20 @@ public class MenuManagerGUI extends Application {
         pane.add(button,1,3);
         pane.setHgap(10.0);
 
-        return pane;
+        layout.setTop(menubar);
+        layout.setCenter(pane);
 
+        return layout;
     }
 
-    private GridPane build_worker(){
+    private BorderPane build_worker(){
         Label label1=new Label("Which worker:");
         Label clabel= new Label("Customers Served:");
         Label sslabel= new Label("Scoops Served:");
         Label mtlabel= new Label("Money Taken:");
         Button button=new Button("Submit");
         GridPane pane = new GridPane();
+        BorderPane layout = new BorderPane();
         ChoiceBox<Worker> choice = new ChoiceBox<>();
         TextField ctext = new TextField();
         TextField sstext = new TextField();
@@ -408,7 +553,8 @@ public class MenuManagerGUI extends Application {
                 choice.getValue().moneyTaken=mt;
                 choice.getValue().scoopsServed=ss;
                 choice.getValue().customerServed=c;
-                stage.setScene(update_Menu());
+                stage.setScene(primaryStage());
+                //stage.setScene(update_Menu());
             }catch(Exception ex){
                 System.err.println("Values not correct!");
             }
@@ -435,12 +581,17 @@ public class MenuManagerGUI extends Application {
         pane.add(button,1,4);
         pane.setHgap(10.0);
         pane.setVgap(10.0);
-        return pane;
+
+        layout.setTop(menubar);
+        layout.setCenter(pane);
+
+        return layout;
     }
 
-    private GridPane build_customer(){
+    private BorderPane build_customer(){
         GridPane pane=new GridPane();
-        Label label1=new Label("Which worker:");
+        BorderPane layout = new BorderPane();
+        Label label1=new Label("Which Customer:");
         Label wlabel= new Label("Customer Money:");
         Label lhlabel = new Label("Level of Happiness:");
         TextField lhtext= new TextField();
@@ -456,7 +607,8 @@ public class MenuManagerGUI extends Application {
                 double w = Double.parseDouble(wtext.getText());
                 choice.getValue().levelOfHappiness=l;
                 choice.getValue().wallet=w;
-                stage.setScene(update_Menu());
+                stage.setScene(primaryStage());
+                //stage.setScene(update_Menu());
             }catch(Exception ex){
                 System.err.println("TRY again!");
             }
@@ -479,130 +631,383 @@ public class MenuManagerGUI extends Application {
         pane.add(button, 1, 3);
         pane.setHgap(10.0);
         pane.setVgap(10.0);
-        return pane;
+
+        layout.setTop(menubar);
+        layout.setCenter(pane);
+
+        return layout;
     }
-    GridPane build_order(){
-        GridPane box = new GridPane();
 
-        if(shopper.orderList.size()!=0){
-
-
-
-            //choicebox
-            Label ctext = new Label("WHich order:");
-            ChoiceBox<Order> choice = new ChoiceBox<>();
-            ChoiceBox<Worker>wchoice = new ChoiceBox<>();
-            for(int x=0 ; x<shopper.orderList.size(); x++) choice.getItems().add(shopper.orderList.get(x));
-            box.add(ctext, 0, 0);
-            box.add(choice, 1, 0);
-            choice.setValue(shopper.orderList.get(0));
-
-
-            //update worker
-            Label wlabel = new Label("Worker:");
-            for(int x=0 ; x<worker.size(); x++) wchoice.getItems().add(worker.get(x));
-            wchoice.setValue(choice.getValue().w);
-            box.add(wlabel, 0, 1);
-            box.add(wchoice,1,1);
-
-            //customer
-            ChoiceBox<Customer> cchoice = new ChoiceBox<>();
-            Label clabel = new Label("Customer:");
-            for(int x=0 ; x<customer.size(); x++) cchoice.getItems().add(customer.get(x));
-            cchoice.setValue(choice.getValue().c);
-            box.add(clabel, 0, 2);
-            box.add(cchoice,1,2);
+    private BorderPane pay_order(){
+        BorderPane layout = new BorderPane();
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setVgap(8);
+        grid.setHgap(10);
+        layout.setCenter(grid);
+        layout.setTop(menubar);
+        if(shopper.orderList.isEmpty()){
+            grid.add(new Label("No order created!"),0,0);
+            return layout;
+        }
+        Button button = new Button("Submit");
 
 
-            //serving
-            VBox items = new VBox();
-            ArrayList<CheckBox> check = new ArrayList<>();
-            for(int x=0;x<shopper.servingList.size();x++){
-                Color col= new Color(1,1,0,1);
-                CheckBox cb = new CheckBox(shopper.servingList.get(x).toString());
-                cb.setUserData(shopper.servingList.get(x));
-                cb.setTextFill(col);
-                for(int y=0;y<choice.getValue().servings.size();y++){
-                    if(cb.getUserData().equals(choice.getValue().servings.get(y)))
-                        cb.setSelected(true);
-                }
-                check.add(cb);
+
+        Label label = new Label("Pay Order:");
+        ChoiceBox<Order> choice = new ChoiceBox();
+        for(int x=0;x<shopper.orderList.size();x++)choice.getItems().add(shopper.orderList.get(x));
+
+
+        button.setOnAction(e->{
+            try {
+                shopper.pay_order(choice.getValue());
+            }catch(MoneyException ex){
+                System.out.println(ex);
             }
-            for(int x=0;x<check.size();x++)items.getChildren().add(check.get(x));
-            box.add(items, 1, 3);
-            choice.setOnAction(e->{
-                cchoice.setValue(choice.getValue().c);
-                wchoice.setValue(choice.getValue().w);
-                for(int x=0;x<check.size();x++){
-                    for(int y=0;y<choice.getValue().servings.size();y++){
-                        if(check.get(x).equals(choice.getValue().servings.get(y)))
-                            check.get(x).setSelected(true);
-                        else check.get(x).setSelected(false);
-                    }
-                }});
+            stage.setScene(primaryStage());
+        });
 
 
 
-            //button
-            Button button = new Button("Submit");
-            box.add(button, 1,4);
-            button.setOnAction(e->{
-                Order it=choice.getValue();
-                it.w=wchoice.getValue();
-                it.c=cchoice.getValue();
-                for(int x = 0;x<check.size();x++){
-                    if(check.get(x).isSelected()){
-                        choice.getValue().servings.add((Serving)check.get(x).getUserData());
-                    }
-                }
-                stage.setScene(update_Menu());
-            });
-            box.setVgap(5);
-            box.setHgap(10);
-            box.setTranslateX(100);
-            box.setTranslateY(50);
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
 
-        }else {Label label = new Label("NO Order placed!");
 
-            box.add(label, 0,0);
-        }
-        return box;
+        return layout;
     }
 
-    private GridPane submit(String choice){
 
-        switch(choice){
-            case "Ice Cream":return build_ice();
-            case "Worker":return build_worker();
-            case "Customer":return build_customer();
-            case "Order": return build_order();
+    private BorderPane place_order(){
+        //shopper.servingList.add(new Serving("Dog Shit"));
+        BorderPane layout = new BorderPane();
+        GridPane grid = new GridPane();
+        ArrayList<Serving> servingList = new ArrayList<>();
+
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setVgap(8);
+        grid.setHgap(10);
+
+        layout.setCenter(grid);
+        layout.setTop(menubar);
+        if(customer.isEmpty()){
+            Label temp = new Label("No Customer Created");
+            grid.add(temp,0,0);
+            return layout;
+        }
+        else if(worker.isEmpty()){
+            Label temp = new Label("No Worker Created");
+            grid.add(temp,0,0);
+            return layout;
+        }
+        else if(IceCreamList.isEmpty()){
+            Label temp = new Label("No Ice Cream Created");
+            grid.add(temp,0,0);
+            return layout;
         }
 
+        Label wl= new Label("Worker:");
+        ChoiceBox<Worker> wc = new ChoiceBox<>();
+        for(int x=0;x<worker.size();x++){
+
+            if(worker.get(x).typeOfWorker!="Stocker" && !worker.get(x).getOnBreak()) {
+                wc.getItems().add(worker.get(x));
+                wc.setValue(worker.get(x));
+            }
+        }
+        GridPane.setConstraints(wl, 0, 0);
+        GridPane.setConstraints(wc, 1, 0);
+
+        Label cl = new Label("Customer:");
+        ChoiceBox<Customer> cc = new ChoiceBox<>();
+        for(int x=0;x<customer.size();x++){
+
+            cc.getItems().add(customer.get(x));
+        }
+        GridPane.setConstraints(cl, 0, 1);
+        GridPane.setConstraints(cc, 1, 1);
+
+        Label addLabel = new Label("Add to Order:");
+        ChoiceBox<String> addChoice= new ChoiceBox<>();
+        addChoice.getItems().addAll("Ice Cream Cone", "Ice Cream Sundae", "Banana Split", "Ice Cream Soda",
+                "Root Beer Float");
+        addChoice.setValue("Ice Cream Cone");
+        Button addButton = new Button("Add");
+        GridPane.setConstraints(addLabel, 0, 2);
+        GridPane.setConstraints(addChoice, 1, 2);
+        GridPane.setConstraints(addButton, 2, 2);
+        addButton.setOnAction(e -> {
+            switch (addChoice.getValue()) {
+                case "Ice Cream Cone":
+                    servingList.add(addIceCreamCone());
+                    break;
+                case "Ice Cream Sundae":
+                    System.out.println("Ice Cream Sundae");
+                    break;
+                case "Banana Split":
+                    System.out.println("Banana Split");
+                    break;
+                case "Ice Cream Soda":
+                    System.out.println("Ice Cream Soda");
+                    break;
+                case "Root Beer Float":
+                    System.out.println("Root Beer Float");
+                    break;
+            }
+        });
+
+        Button submit = new Button("Submit");
+        GridPane.setConstraints(submit, 1, 3);
+        submit.setOnAction(e -> {
+            Order ord = new Order(cc.getValue(), wc.getValue(), servingList, rand);
+            shopper.orderList.add(ord);
+            stage.setScene(primaryStage());
+        });
+
+        grid.getChildren().addAll(wc, wl, cc, cl, addLabel, addChoice, addButton, submit);
+        return layout;
+    }
+
+    public IceCreamCone addIceCreamCone(){
+        Stage iccStage = new Stage();
+        GridPane grid = new GridPane();
+        IceCreamCone icc = new IceCreamCone();
+
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setVgap(8);
+        grid.setHgap(10);
+
+        Label firstScoopLabel = new Label("1st Scoop:");
+        ChoiceBox<IceCreamMain> firstScoopChoice = new ChoiceBox<>();
+        GridPane.setConstraints(firstScoopLabel, 0, 0);
+        GridPane.setConstraints(firstScoopChoice, 1, 0);
+
+        for(int x=0;x<shopper.iceCreamList.size();x++){
+
+            firstScoopChoice.getItems().add(shopper.iceCreamList.get(x));
+        }
+
+        Label secondScoopLabel = new Label("2nd Scoop:");
+        ChoiceBox<IceCreamMain> secondScoopChoice = new ChoiceBox<>();
+        GridPane.setConstraints(secondScoopLabel, 0, 1);
+        GridPane.setConstraints(secondScoopChoice,1, 1);
+
+        for(int x=0;x<shopper.iceCreamList.size();x++){
+
+            secondScoopChoice.getItems().add(shopper.iceCreamList.get(x));
+        }
+
+        Label thirdScoopLabel = new Label("3rd Scoop:");
+        ChoiceBox<IceCreamMain> thirdScoopChoice = new ChoiceBox<>();
+        GridPane.setConstraints(thirdScoopLabel, 0, 2);
+        GridPane.setConstraints(thirdScoopChoice, 1, 2);
+
+        for(int x=0;x<shopper.iceCreamList.size();x++){
+
+            thirdScoopChoice.getItems().add(shopper.iceCreamList.get(x));
+        }
+
+        Label coneTypeLabel = new Label("Type of Cone:");
+        ChoiceBox<String> coneTypeChoice = new ChoiceBox<>();
+        GridPane.setConstraints(coneTypeLabel, 0, 3);
+        GridPane.setConstraints(coneTypeChoice, 1, 3);
+
+        coneTypeChoice.getItems().addAll("Cake Cone", "Sugar Cone", "Waffle Cone");
+        coneTypeChoice.setValue("Cake Cone");
+
+        Button add = new Button("Add");
+        GridPane.setConstraints(add, 1, 4);
+        add.setOnAction(e -> {
+            if (firstScoopChoice != null && secondScoopChoice == null && thirdScoopChoice == null) {
+                icc.numberOfScoops = 1;
+                icc.flavors[0] = firstScoopChoice.getValue();
+            }
+            else if (firstScoopChoice != null && secondScoopChoice != null && thirdScoopChoice == null) {
+                icc.numberOfScoops = 2;
+                icc.flavors[0] = firstScoopChoice.getValue();
+                icc.flavors[1] = secondScoopChoice.getValue();
+            }
+            else if (firstScoopChoice != null && secondScoopChoice != null && thirdScoopChoice != null) {
+                icc.numberOfScoops = 3;
+                icc.flavors[0] = firstScoopChoice.getValue();
+                icc.flavors[1] = secondScoopChoice.getValue();
+                icc.flavors[2] = thirdScoopChoice.getValue();
+            }
+            icc.coneType = coneTypeChoice.getValue();
+            iccStage.close();
+        });
+
+        grid.getChildren().addAll(firstScoopLabel, firstScoopChoice, secondScoopLabel, secondScoopChoice,
+                thirdScoopLabel, thirdScoopChoice, coneTypeLabel, coneTypeChoice, add);
+
+        iccStage.setScene(new Scene(grid, 300, 300));
+        iccStage.show();
+        return icc;
+    }
+
+    private BorderPane active_cashier(){
+        GridPane grid = new GridPane();
+        BorderPane layout = new BorderPane();
+        layout.setCenter(grid);
+        layout.setTop(menubar);
+        Button button = new Button("Submit");
+
+
+        Label label = new Label(" Set Cashier Active");
+        ChoiceBox<Cashier> choice = new ChoiceBox();
+        for(int x=0;x<worker.size();x++){
+            if(worker.get(x).typeOfWorker.equals("Cashier"))choice.getItems().add((Cashier)worker.get(x));
+
+        }
+
+
+        button.setOnAction(e->{
+            if(choice.getValue()!=null) {
+
+                choice.getValue().setActive();
+            }
+
+            stage.setScene(primaryStage());
+
+        });
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return layout;
+    }
+
+    private BorderPane active_stocker(){
+        GridPane grid = new GridPane();
+        BorderPane layout = new BorderPane();
+        layout.setCenter(grid);
+        layout.setTop(menubar);
+        Button button = new Button("Submit");
+
+
+        Label label = new Label(" Set Stocker Active:");
+        ChoiceBox<Stocker> choice = new ChoiceBox();
+        for(int x=0;x<worker.size();x++){
+            if(worker.get(x).typeOfWorker.equals("Stocker"))choice.getItems().add((Stocker)worker.get(x));
+
+        }
+
+
+        button.setOnAction(e->{
+            if(choice.getValue()!=null){
+
+                choice.getValue().setActive();
+            }
+
+            stage.setScene(primaryStage());
+
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return layout;
+    }
+
+    private BorderPane set_cashier_break(){
+        GridPane grid = new GridPane();
+        BorderPane layout = new BorderPane();
+        layout.setCenter(grid);
+        layout.setTop(menubar);
+        Button button = new Button("Submit");
+
+
+
+        Label label = new Label(" Set Cashier On Break:");
+        ChoiceBox<Cashier> choice = new ChoiceBox();
+        for(int x=0;x<worker.size();x++){
+            if(worker.get(x).typeOfWorker.equals("Cashier"))choice.getItems().add((Cashier)worker.get(x));
+
+        }
+
+
+        button.setOnAction(e->{
+            if(choice.getValue()!=null){
+                if(choice.getValue().getOnBreak())
+                    choice.getValue().onBreak=false;
+                else choice.getValue().onBreak=true;}
+
+            stage.setScene(primaryStage());
+
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return layout;
+    }
+
+
+
+    private BorderPane set_stocker_break(){
+        GridPane grid = new GridPane();
+        BorderPane layout = new BorderPane();
+        layout.setCenter(grid);
+        layout.setTop(menubar);
+        Button button = new Button("Submit");
+
+
+
+        Label label = new Label(" Set Stocker On Break:");
+        ChoiceBox<Stocker> choice = new ChoiceBox();
+        for(int x=0;x<worker.size();x++)if(worker.get(x).typeOfWorker.equals("Stocker"))choice.getItems().add((Stocker)worker.get(x));
+
+
+        button.setOnAction(e->{
+            if(choice.getValue()!=null){
+                if(choice.getValue().getOnBreak())
+                    choice.getValue().onBreak=false;
+                else choice.getValue().onBreak=true;}
+
+            stage.setScene(primaryStage());
+
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return layout;
+    }
+
+    /*
+    private GridPane check_task(String str){
+        switch(str){
+            case "Pay Order":return pay_order();
+            case "Place Order":return place_order();
+            case "Active Cashier":return active_cashier();
+            case "Active Stocker": return active_stocker();
+            case "Cashier on Break":return set_cashier_break();
+            case "Stocker on Break":return set_stocker_break();
+            //case "Start Thread":start_thread();break;
+        }
         return new GridPane();
     }
-    /*
-    private VBox vbox_maker(String local,String lab){
-        VBox box= new VBox();
-        Label label= new Label(lab);
-        File file= new File(local);
-        Image img = new Image(file.toString(),false);
 
-        ImageView view = new ImageView();
-        view.setFitWidth(75);
-        view.setFitHeight(75);
-        view.setImage(img);
-        view.setOnDragDetected(e->{
-            Dragboard db=view.startDragAndDrop(TransferMode.ANY);
-            ClipboardContent clip = new ClipboardContent();
-            view.setVisible(false);
+    void start_thread(){
+        Thread thread = new Thread(new TimeThread(stage));
+        thread.start();
 
-            clip.putImage(view.getImage());
-            db.setContent(clip);
-        });
-        view.setOnDragDone(e->view.setVisible(true));
-        box.getChildren().addAll(view,label);
-        box.setBorder(Border.EMPTY);
-        return box;
     }
     */
 }

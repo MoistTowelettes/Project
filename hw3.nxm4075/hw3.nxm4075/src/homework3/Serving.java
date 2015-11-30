@@ -21,6 +21,7 @@ public class Serving {
     //is instantiated from a class.
     public Serving(){
 
+
         //overallPrice = ic.price;
         //System.out.printf("Created %s\n",getClass().getSimpleName());
     }

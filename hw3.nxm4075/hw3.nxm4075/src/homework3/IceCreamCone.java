@@ -14,11 +14,12 @@ public class IceCreamCone extends Serving {
     int numberOfScoops;
     
     int typeOfExtra;
-    
+    IceCreamMain[] flavors;
+    String coneType;
     //constructor
     IceCreamCone(){
-        
-        this.typeofServing = "Cones";
+        flavors = new IceCreamMain[3];
+        coneType = "";
     }
     
     //et the number of scoops

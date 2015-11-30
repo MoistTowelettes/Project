@@ -43,7 +43,7 @@ public class Customer {
      public ArrayList<Customer> getCustomerList(File customerFile){
         
         String line;
-        String tokens[];
+        String[] tokens;
         //File customerFile = new File(FILENAME);
         ArrayList <Customer> cusList = new ArrayList<>();
         try {
@@ -53,7 +53,7 @@ public class Customer {
             while (inputCustomer.hasNextLine())
             {
                 line=inputCustomer.nextLine();
-                tokens=line.split(", ");
+                tokens=line.split(", |,");
                 Customer cus = new Customer();
                 //reading all the contents from the file and storing it in the respective variables.
                 cus.idNumber = parseLong(tokens[0]);
@@ -87,7 +87,7 @@ public class Customer {
             Formatter myFormatter = new Formatter(customerFile);
             for (int i = 0; i < workerLen; i++) {
                 if (i != workerLen-1) {
-                    myFormatter.format("%s, %s, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", customer.get(i).idNumber,
+                    myFormatter.format("%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", customer.get(i).idNumber,
                             customer.get(i).name, customer.get(i).wallet, customer.get(i).levelOfHappiness,
                             customer.get(i).t.pennies, customer.get(i).t.nickels, customer.get(i).t.dimes,
                             customer.get(i).t.quarters, customer.get(i).t.ones,
@@ -95,7 +95,7 @@ public class Customer {
                             customer.get(i).t.twenties);
                 }
                 else {
-                    myFormatter.format("%s, %s, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d", customer.get(i).idNumber,
+                    myFormatter.format("%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d", customer.get(i).idNumber,
                             customer.get(i).name, customer.get(i).wallet, customer.get(i).levelOfHappiness,
                             customer.get(i).t.pennies, customer.get(i).t.nickels, customer.get(i).t.dimes,
                             customer.get(i).t.quarters, customer.get(i).t.ones,
@@ -109,59 +109,6 @@ public class Customer {
             System.out.println("CUSTOMER FILE NOT FOUND");
         }
     }
-
-    /*public void updateFile() throws FileNotFoundException{
-        
-        //creating a new file to write the data in.
-        File f = new File("customerFile(" + n + ").txt");
-        //the old file from where the data is going to be read in.
-        File customerFile = new File(FILENAME);
-        Formatter myFormatter;
-        String line;
-        String tokens[];
-        myFormatter = new Formatter(f);
-        //creating a scanner to read the data from the input file.
-        Scanner inputCustomer=new Scanner(customerFile);
-        
-        while (inputCustomer.hasNextLine()){
-            line=inputCustomer.nextLine();
-            tokens=line.split(", ");
-            String name = this.name;
-            //checks if the name chosen by the user is matches with the name in the file.
-            if(tokens[1].equals(name)){
-                tokens[2] = String.valueOf(this.wallet);
-                tokens[3] = String.valueOf(this.levelOfHappiness);
-                tokens[4] = String.valueOf(this.t.pennies);
-                tokens[5] = String.valueOf(this.t.nickels);
-                tokens[6] = String.valueOf(this.t.dimes);
-                tokens[7] = String.valueOf(this.t.quarters);
-                tokens[8] = String.valueOf(this.t.ones);
-                tokens[9] = String.valueOf(this.t.fives);
-                tokens[10] = String.valueOf(this.t.tens);
-                tokens[11] = String.valueOf(this.t.twenties);
-                
-                String newLine = tokens[0];
-                //Converting the string array to a string because the toString() wasn't working.
-                for(int i = 1; i < tokens.length; i++){
-                    newLine = newLine + ", " + tokens[i];
-                }
-                myFormatter.format(newLine + "%n");
-            }
-            else{myFormatter.format(line + "%n");}
-            
-        }
-        
-        //changing the global name of the file so the system reads from the most newly updated file.
-        FILENAME = "customerFile(" + n + ").txt";
-        n++;
-        myFormatter.flush();
-        myFormatter.close();
-        //closing the input stream on the file from which we were reading.
-        inputCustomer.close();
-        //Deleting the previous file.
-        customerFile.delete();
-        
-    }*/
     
     public void displayDetails(){
     

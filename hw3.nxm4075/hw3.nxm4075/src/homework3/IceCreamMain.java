@@ -21,6 +21,7 @@ public class IceCreamMain {
     long idNumber;
     double price;
     String name;
+    String flavor;
     String description;
     int gallonsIC;
     File iceCreamFile;
@@ -52,12 +53,13 @@ public class IceCreamMain {
             while (inputIceCream.hasNextLine())
             {
                 line=inputIceCream.nextLine();
-                tokens=line.split(", ");
+                tokens=line.split(", |,");
                 IceCreamMain ic = new IceCreamMain();
                 ic.idNumber = parseLong(tokens[0]);
                 ic.price = parseDouble(tokens[1]);
                 ic.name = tokens[2];
-                ic.description = tokens[3];
+                ic.flavor = tokens[3];
+                ic.description = tokens[4];
                 icList.add(ic);
             }
             inputIceCream.close();
@@ -76,13 +78,13 @@ public class IceCreamMain {
             Formatter myFormatter = new Formatter(iceCreamFile);
             for (int i = 0; i < iceCreamLen; i++) {
                 if (i != iceCreamLen-1) {
-                    myFormatter.format("%s, %s, %s, %s, %d\n", iceCream.get(i).idNumber,
-                            iceCream.get(i).price, iceCream.get(i).name,
+                    myFormatter.format("%s,%s,%s,%s,%s,%d\n", iceCream.get(i).idNumber,
+                            iceCream.get(i).price, iceCream.get(i).name, iceCream.get(i).flavor,
                             iceCream.get(i).description, iceCream.get(i).gallonsIC);
                 }
                 else {
-                    myFormatter.format("%s, %s, %s, %s, %d", iceCream.get(i).idNumber,
-                            iceCream.get(i).price, iceCream.get(i).name,
+                    myFormatter.format("%s,%s,%s,%s,%s,%d", iceCream.get(i).idNumber,
+                            iceCream.get(i).price, iceCream.get(i).name, iceCream.get(i).flavor,
                             iceCream.get(i).description, iceCream.get(i).gallonsIC);
                 }
             }

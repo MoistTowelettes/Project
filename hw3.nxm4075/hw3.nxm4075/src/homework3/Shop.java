@@ -79,7 +79,42 @@ public class Shop {
         orderList.add(or);
         
     }
-    
+
+    //add a new Ice Cream
+    public void addIceCream(String name, String price, String flavor, String description, String scoops) {
+        IceCreamMain newIceCream = new IceCreamMain();
+
+        newIceCream.name = name;
+        newIceCream.price = Double.parseDouble(price);
+        newIceCream.flavor = flavor;
+        newIceCream.description = description;
+        newIceCream.gallonsIC = Integer.parseInt(scoops);
+
+        iceCreamList.add(newIceCream);
+    }
+
+    //add a new Worker
+    public void addWorker(String name, String idNumber) {
+        Worker newWorker = new Worker();
+
+        newWorker.workerName = name;
+        newWorker.idNumber = Long.parseLong(idNumber);
+
+        workerList.add(newWorker);
+    }
+
+    //add a new Customer
+    public void addCustomer(String name, String idNumber, String happinessLevel, String wallet) {
+        Customer newCustomer = new Customer();
+
+        newCustomer.name = name;
+        newCustomer.idNumber = Long.parseLong(idNumber);
+        newCustomer.levelOfHappiness = Integer.parseInt(happinessLevel);
+        newCustomer.wallet = Double.parseDouble(wallet);
+
+        customerList.add(newCustomer);
+    }
+
     //Calculating the total money for that particular order.
     public double getTotalMoney(int orderSelect){
     
@@ -350,4 +385,49 @@ public class Shop {
         wor.saveWorker(workerList);
         cus.saveCustomer(customerList);
     }
+
+    public void pay_order(Order order) throws MoneyException {
+        Worker w =order.w;
+        Customer c = order.c;
+        double total=0;
+        int serv=0;
+        for(int x=0;x<order.servings.size();x++){
+            total+=order.servings.get(x).overallPrice;
+            serv+=order.servings.get(x).getNumberOfScoops();
+
+        }
+        if (total<=c.wallet) {
+            c.wallet -= total;
+            order.status=true;
+            c.levelOfHappiness+=1;
+            w.customerServed+=1;
+            w.moneyTaken+=total;
+            w.scoopsServed+=serv;
+
+
+
+            if((w.equals("Cashier"))){
+
+                if(w.getOnBreak()){
+
+                    w.setPatience(1);
+                }
+                else{
+
+                    w.setPatience(-1);
+                    w.scoopsServed +=1;
+                }
+            }
+
+
+
+
+
+
+        }
+        else throw new MoneyException();
+
+
+    }
+
 }

@@ -1,6 +1,0 @@
-2001, Groucho, 0, 0, 0.00, Stocker
-2002, Chico, 0, 0, 0.00, Stocker
-2005, John, 11, 0, 0.00, Worker
-2006, Carter, 0, 0, 0.00, Worker
-2003, Harpo, 150, 450, 525.15, Cashier
-2004, Jim, 10, 0, 0.00, Cashier

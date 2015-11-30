@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 
 public class Worker {
 
-    static String FILENAME = "workerFile.txt";
     static int n = 0;
     //this is an attribute in worker.
     long idNumber;
@@ -57,15 +56,28 @@ public class Worker {
             System.out.println("Successfully loaded file");
             while (inputWorker.hasNextLine()){
                 line=inputWorker.nextLine();
-                tokens=line.split(", ");
+                tokens=line.split(", |,");
                 
-                Worker wor = checkForWorkerType(tokens[5]);
+                Worker wor = checkForWorkerType(tokens[1]);
                 wor.idNumber = parseLong(tokens[0]);
-                wor.workerName = tokens[1];
-                wor.customerServed = parseLong(tokens[2]);
-                wor.scoopsServed = parseInt(tokens[3]);
-                wor.typeOfWorker = tokens[5];
-                
+                wor.typeOfWorker = tokens[1];
+                wor.workerName = tokens[2];
+                wor.customerServed = parseLong(tokens[3]);
+                wor.scoopsServed = parseInt(tokens[4]);
+                wor.moneyTaken = Double.parseDouble(tokens[5]);
+
+                switch (wor.typeOfWorker) {
+                    case "Cashier":
+                        wor.setPatience(Integer.parseInt(tokens[6]));
+                        break;
+                    case "Stocker":
+                        wor.setStamina(Integer.parseInt(tokens[6]));
+                        break;
+                    default:
+                        break;
+                }
+
+                //need to add patience and stamina
                 worList.add(wor);
                 
             }
@@ -82,14 +94,45 @@ public class Worker {
             Formatter myFormatter = new Formatter(workerFile);
             for (int i = 0; i < workerLen; i++) {
                 if (i != workerLen-1) {
-                    myFormatter.format("%s, %s, %d, %d, %s, %s\n", worker.get(i).idNumber, worker.get(i).workerName,
-                            worker.get(i).scoopsServed, worker.get(i).customerServed, worker.get(i).moneyTaken,
-                            worker.get(i).getClass().getSimpleName());
+                    switch (worker.get(i).getClass().getSimpleName()){
+                        case "Cashier":
+                            myFormatter.format("%s, %s, %s, %d, %d, %s, %d\n", worker.get(i).idNumber,
+                                    worker.get(i).getClass().getSimpleName(), worker.get(i).workerName,
+                                    worker.get(i).scoopsServed, worker.get(i).customerServed, worker.get(i).moneyTaken,
+                                    worker.get(i).getPatience());
+                            break;
+                        case "Stocker":
+                            myFormatter.format("%s, %s, %s, %d, %d, %s, %d\n", worker.get(i).idNumber,
+                                    worker.get(i).getClass().getSimpleName(), worker.get(i).workerName,
+                                    worker.get(i).scoopsServed, worker.get(i).customerServed, worker.get(i).moneyTaken,
+                                    worker.get(i).getStamina());
+                            break;
+                        default:
+                            myFormatter.format("%s, %s, %s, %d, %d, %s\n", worker.get(i).idNumber,
+                                    worker.get(i).getClass().getSimpleName(), worker.get(i).workerName,
+                                    worker.get(i).scoopsServed, worker.get(i).customerServed, worker.get(i).moneyTaken);
+                    }
                 }
+
                 else {
-                    myFormatter.format("%s, %s, %d, %d, %s, %s", worker.get(i).idNumber, worker.get(i).workerName,
-                            worker.get(i).scoopsServed, worker.get(i).customerServed, worker.get(i).moneyTaken,
-                            worker.get(i).getClass().getSimpleName());
+                    switch (worker.get(i).getClass().getSimpleName()){
+                        case "Cashier":
+                            myFormatter.format("%s, %s, %s, %d, %d, %s, %d", worker.get(i).idNumber,
+                                    worker.get(i).getClass().getSimpleName(), worker.get(i).workerName,
+                                    worker.get(i).scoopsServed, worker.get(i).customerServed, worker.get(i).moneyTaken,
+                                    worker.get(i).getPatience());
+                            break;
+                        case "Stocker":
+                            myFormatter.format("%s, %s, %s, %d, %d, %s, %d", worker.get(i).idNumber,
+                                    worker.get(i).getClass().getSimpleName(), worker.get(i).workerName,
+                                    worker.get(i).scoopsServed, worker.get(i).customerServed, worker.get(i).moneyTaken,
+                                    worker.get(i).getStamina());
+                            break;
+                        default:
+                            myFormatter.format("%s, %s, %s, %d, %d, %s", worker.get(i).idNumber,
+                                    worker.get(i).getClass().getSimpleName(), worker.get(i).workerName,
+                                    worker.get(i).scoopsServed, worker.get(i).customerServed, worker.get(i).moneyTaken);
+                    }
                 }
             }
             myFormatter.close();
@@ -116,48 +159,6 @@ public class Worker {
         }
         return null;
     }
-    
-    /**
-     * Updating the file after the user has paid his share of money. He will have
-     * less amount of coins and total money with him now.
-     * @throws FileNotFoundException 
-     */
-    /*public void updateFile() throws FileNotFoundException{
-    
-        n++;
-        File f = new File("workerFile(" + n +").txt");
-        File workerFile = new File(FILENAME);
-        Formatter myFormatter;
-        String line;
-        String tokens[];
-        myFormatter = new Formatter(f);
-        Scanner inputWorker=new Scanner(workerFile);
-        
-        while (inputWorker.hasNextLine()){
-            line=inputWorker.nextLine();
-            tokens=line.split(", ");
-            String name = this.workerName;
-            if(tokens[1].equals(name)){
-                
-                tokens[2] = String.valueOf(this.customerServed);
-                tokens[3] = String.valueOf(this.scoopsServed);
-                tokens[4] = String.valueOf(this.moneyTaken);
-                String newLine = tokens[0];
-                for(int i = 1; i < tokens.length; i++){
-                    newLine = newLine + ", " + tokens[i];
-                }
-                myFormatter.format(newLine + "%n");
-            }
-            else{myFormatter.format(line + "%n");}
-            
-        }
-        
-        FILENAME = "workerFile(" + n + ").txt";
-        myFormatter.flush();
-        myFormatter.close();
-        inputWorker.close();
-        workerFile.delete();
-    }*/
     
     public void displayDetails(){
     

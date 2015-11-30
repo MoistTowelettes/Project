@@ -1,6 +1,7 @@
 package homework3;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -15,7 +16,7 @@ public class Order {
     Customer c;
     Worker w;
     //ArrayList for keeping all the servings.
-    ArrayList <Serving> servings = new ArrayList<>();
+    ArrayList <Serving> servings;
 
     //This is the constructor. Constructors are called every time an object
     //is instantiated from a class.
@@ -23,9 +24,18 @@ public class Order {
 
         orderNumber = 314;
         status = false;
+        servings = new ArrayList<>();
         System.out.printf("Created %s\n", getClass().getSimpleName());
     }
-    
+
+    public Order (Customer cus, Worker work, ArrayList<Serving> serv,Random num){
+        this.c =cus;
+        this.w=work;
+        this.servings=serv;
+        this.orderNumber=num.nextInt(1000);
+        this.status=false;
+        num.setSeed(this.orderNumber);
+    }
 
     //This function, when called, will print a report to the screen.
     public String display(){
@@ -39,5 +49,9 @@ public class Order {
     public void setOrderNumber(int orderNumber){
 
         this.orderNumber = orderNumber;
+    }
+
+    public String toString(){
+        return orderNumber + "";
     }
 }
