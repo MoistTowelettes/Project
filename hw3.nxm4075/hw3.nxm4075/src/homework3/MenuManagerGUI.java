@@ -30,6 +30,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import java.util.Random;
 
+
 public class MenuManagerGUI extends Application {
 
     private Shop shopper;
@@ -626,6 +627,7 @@ public class MenuManagerGUI extends Application {
         check.getItems().add("Active Stocker");
         check.getItems().add("Cashier on Break");
         check.getItems().add("Stocker on Break");
+        check.getItems().add("Start Thread");
 
         check.setValue("Pay Order");
 
@@ -658,9 +660,12 @@ public class MenuManagerGUI extends Application {
 
 
         button.setOnAction(e->{
-
-
-
+            try {
+                shopper.pay_order(choice.getValue());
+            }catch(MoneyException ex){
+                System.out.println(ex);
+            }
+            stage.setScene(task_menu());
         });
 
 
@@ -675,6 +680,7 @@ public class MenuManagerGUI extends Application {
 
 
     private GridPane place_order(){
+        shopper.servingList.add(new Serving("Dog Shit"));
         GridPane grid = new GridPane();
         if(customer.isEmpty()){
             Label temp = new Label("No Customer Created");
@@ -683,10 +689,6 @@ public class MenuManagerGUI extends Application {
         }else if(worker.isEmpty()){
             Label temp = new Label("No Worker Created");
             grid.add(temp,0,0);
-            return grid;
-        }else if(shopper.servingList.isEmpty()) {
-            Label temp = new Label("No Serving Created");
-            grid.add(temp, 0, 0);
             return grid;
         }
 
@@ -728,10 +730,10 @@ public class MenuManagerGUI extends Application {
             Label sl = new Label("Serving");
             VBox items = new VBox();
             ArrayList<CheckBox> check = new ArrayList<>();
-            for (int x = 0; x < shopper.servingList.size(); x++) {
+            for (int x = 0; x < IceCreamList.size(); x++) {
                 //Color col= new Color(1,1,0,1);
-                CheckBox cb = new CheckBox(shopper.servingList.get(x).toString());
-                cb.setUserData(shopper.servingList.get(x));
+                CheckBox cb = new CheckBox(IceCreamList.get(x).toString());
+                cb.setUserData(IceCreamList.get(x));
                 //cb.setTextFill(col);
 
                 check.add(cb);
@@ -903,11 +905,16 @@ public class MenuManagerGUI extends Application {
             case "Active Stocker": return active_stocker();
             case "Cashier on Break":return set_cashier_break();
             case "Stocker on Break":return set_stocker_break();
+            case "Start Thread":start_thread();break;
         }
         return new GridPane();
     }
 
+    void start_thread(){
+        Thread thread = new Thread(new TimeThread(stage));
+        thread.start();
 
+    }
 
 
 

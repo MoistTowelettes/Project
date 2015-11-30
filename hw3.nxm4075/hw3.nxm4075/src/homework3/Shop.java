@@ -350,4 +350,50 @@ public class Shop {
         wor.saveWorker(workerList);
         cus.saveCustomer(customerList);
     }
+
+    public void pay_order(Order order) throws MoneyException {
+        Worker w =order.w;
+        Customer c = order.c;
+        double total=0;
+        int serv=0;
+        for(int x=0;x<order.servings.size();x++){
+            total+=order.servings.get(x).overallPrice;
+            serv+=order.servings.get(x).getNumberOfScoops();
+
+        }
+        if (total<=c.wallet) {
+            c.wallet -= total;
+            order.status=true;
+            c.levelOfHappiness+=1;
+            w.customerServed+=1;
+            w.moneyTaken+=total;
+            w.scoopsServed+=serv;
+
+
+
+            if((w.equals("Cashier"))){
+
+                if(w.getOnBreak()){
+
+                    w.setPatience(1);
+                }
+                else{
+
+                    w.setPatience(-1);
+                    w.scoopsServed +=1;
+                }
+            }
+
+
+
+
+
+
+        }
+        else throw new MoneyException();
+
+
+    }
+
+
 }
