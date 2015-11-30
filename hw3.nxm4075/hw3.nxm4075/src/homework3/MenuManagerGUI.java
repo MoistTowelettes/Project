@@ -29,12 +29,7 @@ import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
-<<<<<<< HEAD
 import sun.reflect.annotation.ExceptionProxy;
-=======
-import java.util.Random;
-
->>>>>>> 62b854ef5b10b7e8d906b1d6fb2c88a6ce298d97
 
 public class MenuManagerGUI extends Application {
 
@@ -45,13 +40,7 @@ public class MenuManagerGUI extends Application {
     //added
     private static Stage stage;
     private static MenuBar menubar;
-<<<<<<< HEAD
     Random rand = new Random(1000);
-
-=======
-    //for order num
-    Random rand = new Random(1000);
->>>>>>> 62b854ef5b10b7e8d906b1d6fb2c88a6ce298d97
 
     public MenuManagerGUI() {
         customer = new ArrayList<>();
