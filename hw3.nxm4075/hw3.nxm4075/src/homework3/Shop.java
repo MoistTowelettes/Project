@@ -430,4 +430,8 @@ public class Shop {
 
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 62b854ef5b10b7e8d906b1d6fb2c88a6ce298d97
 }

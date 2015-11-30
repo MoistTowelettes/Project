@@ -27,7 +27,11 @@ public class Order {
         servings = new ArrayList<>();
         System.out.printf("Created %s\n", getClass().getSimpleName());
     }
+<<<<<<< HEAD
 
+=======
+    //i've decided to overload to make my life easier since it wasn't done the first time
+>>>>>>> 62b854ef5b10b7e8d906b1d6fb2c88a6ce298d97
     public Order (Customer cus, Worker work, ArrayList<Serving> serv,Random num){
         this.c =cus;
         this.w=work;
@@ -36,7 +40,10 @@ public class Order {
         this.status=false;
         num.setSeed(this.orderNumber);
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 62b854ef5b10b7e8d906b1d6fb2c88a6ce298d97
     //This function, when called, will print a report to the screen.
     public String display(){
 
@@ -50,8 +57,16 @@ public class Order {
 
         this.orderNumber = orderNumber;
     }
+<<<<<<< HEAD
 
     public String toString(){
         return orderNumber + "";
     }
+=======
+    public String toString(){
+        return orderNumber+"";
+    }
+
+
+>>>>>>> 62b854ef5b10b7e8d906b1d6fb2c88a6ce298d97
 }

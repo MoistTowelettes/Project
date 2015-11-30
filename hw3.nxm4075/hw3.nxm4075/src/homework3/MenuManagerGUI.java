@@ -29,7 +29,12 @@ import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+<<<<<<< HEAD
 import sun.reflect.annotation.ExceptionProxy;
+=======
+import java.util.Random;
+
+>>>>>>> 62b854ef5b10b7e8d906b1d6fb2c88a6ce298d97
 
 public class MenuManagerGUI extends Application {
 
@@ -40,8 +45,13 @@ public class MenuManagerGUI extends Application {
     //added
     private static Stage stage;
     private static MenuBar menubar;
+<<<<<<< HEAD
     Random rand = new Random(1000);
 
+=======
+    //for order num
+    Random rand = new Random(1000);
+>>>>>>> 62b854ef5b10b7e8d906b1d6fb2c88a6ce298d97
 
     public MenuManagerGUI() {
         customer = new ArrayList<>();
@@ -165,7 +175,8 @@ public class MenuManagerGUI extends Application {
         tasksMenu.getItems().addAll(tasksPayOrder, tasksPlaceOrder,
                 tasksActiveCashier, tasksActiveStocker, tasksCashierOnBreak,
                 tasksStockerOnBreak);
-        
+        //taskmenue action
+        tasksMenu.setOnAction(e->stage.setScene(task_menu()));
         //Charts Menu
         Menu chartsMenu = new Menu("Charts");
         MenuItem chartsHappinessPie = new MenuItem("Happiness Pie Chart");
@@ -1010,4 +1021,313 @@ public class MenuManagerGUI extends Application {
 
     }
     */
+
+
+
+    private Scene task_menu(){
+        BorderPane pane = new BorderPane();
+        GridPane grid= new GridPane();
+        pane.setTop(menubar);
+        Button button = new Button("Submit");
+
+
+        Label label = new Label("Select a task!");
+        ChoiceBox<String> check = new ChoiceBox<>();
+        check.getItems().add("Pay Order");
+        check.getItems().add("Place Order");
+        check.getItems().add("Active Cashier");
+        check.getItems().add("Active Stocker");
+        check.getItems().add("Cashier on Break");
+        check.getItems().add("Stocker on Break");
+        check.getItems().add("Start Thread");
+
+        check.setValue("Pay Order");
+
+        grid.add(label, 0,0);
+        grid.add(check, 1,0);
+        grid.add(button,2,0);
+
+
+
+
+        button.setOnAction(e->pane.setCenter(check_task(check.getValue())));
+        pane.setCenter(grid);
+        Scene scene = new Scene(pane,stage.getHeight(),stage.getWidth());
+        return scene;
+    }
+
+    private GridPane pay_order(){
+        GridPane grid = new GridPane();
+        if(shopper.orderList.isEmpty()){
+            grid.add(new Label("No order created!"),0,0);
+            return grid;
+        }
+        Button button = new Button("Submit");
+
+
+
+        Label label = new Label("Pay Order:");
+        ChoiceBox<Order> choice = new ChoiceBox();
+        for(int x=0;x<shopper.orderList.size();x++)choice.getItems().add(shopper.orderList.get(x));
+
+
+        button.setOnAction(e->{
+            try {
+                shopper.pay_order(choice.getValue());
+            }catch(MoneyException ex){
+                System.out.println(ex);
+            }
+            stage.setScene(task_menu());
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return grid;
+    }
+
+
+    private GridPane place_order(){
+        shopper.servingList.add(new Serving("Dog Shit"));
+        GridPane grid = new GridPane();
+        if(customer.isEmpty()){
+            Label temp = new Label("No Customer Created");
+            grid.add(temp,0,0);
+            return grid;
+        }else if(worker.isEmpty()){
+            Label temp = new Label("No Worker Created");
+            grid.add(temp,0,0);
+            return grid;
+        }
+
+
+        Button button = new Button("Submit");
+
+
+
+
+        Label wl= new Label("Worker");
+        ChoiceBox<Worker> wc = new ChoiceBox<>();
+        for(int x=0;x<worker.size();x++){
+
+            if(worker.get(x).typeOfWorker!="Stocker" && !worker.get(x).getOnBreak()) {
+                wc.getItems().add(worker.get(x));
+                wc.setValue(worker.get(x));
+            }
+        }
+        grid.add(wl,0,0);
+        grid.add(wc,1,0);
+
+
+
+
+        Label cl = new Label("Customer");
+        ChoiceBox<Customer> cc = new ChoiceBox<>();
+        for(int x=0;x<worker.size();x++){
+
+                cc.getItems().add(customer.get(x));
+        }
+
+
+        grid.add(cl,0,1);
+        grid.add(cc,1,1);
+
+
+
+
+            Label sl = new Label("Serving");
+            VBox items = new VBox();
+            ArrayList<CheckBox> check = new ArrayList<>();
+            for (int x = 0; x < IceCreamList.size(); x++) {
+                //Color col= new Color(1,1,0,1);
+                CheckBox cb = new CheckBox(IceCreamList.get(x).toString());
+                cb.setUserData(IceCreamList.get(x));
+                //cb.setTextFill(col);
+
+                check.add(cb);
+            }
+                for (int x = 0; x < check.size(); x++) items.getChildren().add(check.get(x));
+
+            grid.add(items, 1, 2);
+
+
+
+
+        button.setOnAction(e->{
+            if(wc.getValue()!=null || cc.getValue()!=null) {
+                ArrayList<Serving> serv = new ArrayList<>();
+                for (int x = 0; x < check.size(); x++) {
+                    if (check.get(x).isSelected()) serv.add((Serving) check.get(x).getUserData());
+                }
+
+                shopper.orderList.add(new Order(cc.getValue(), wc.getValue(), serv, rand));
+            }
+            stage.setScene(task_menu());
+        });
+
+
+
+        grid.add(button,1 ,3);
+        grid.setTranslateX(100);
+        grid.setTranslateY(50);
+        return grid;
+    }
+    private GridPane active_cashier(){
+        GridPane grid = new GridPane();
+        Button button = new Button("Submit");
+
+
+        Label label = new Label(" Set Cashier Active");
+        ChoiceBox<Cashier> choice = new ChoiceBox();
+        for(int x=0;x<worker.size();x++){
+            if(worker.get(x).typeOfWorker.equals("Cashier"))choice.getItems().add((Cashier)worker.get(x));
+
+        }
+
+
+        button.setOnAction(e->{
+            if(choice.getValue()!=null) {
+
+                choice.getValue().setActive();
+            }
+
+            stage.setScene(task_menu());
+
+        });
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return grid;
+    }
+
+    private GridPane active_stocker(){
+        GridPane grid = new GridPane();
+        Button button = new Button("Submit");
+
+
+        Label label = new Label(" Set Stocker Active:");
+        ChoiceBox<Stocker> choice = new ChoiceBox();
+        for(int x=0;x<worker.size();x++){
+            if(worker.get(x).typeOfWorker.equals("Stocker"))choice.getItems().add((Stocker)worker.get(x));
+
+        }
+
+
+        button.setOnAction(e->{
+            if(choice.getValue()!=null){
+
+                    choice.getValue().setActive();
+            }
+
+            stage.setScene(task_menu());
+
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return grid;
+    }
+
+    private GridPane set_cashier_break(){
+        GridPane grid = new GridPane();
+        Button button = new Button("Submit");
+
+
+
+        Label label = new Label(" Set Cashier On Break:");
+        ChoiceBox<Cashier> choice = new ChoiceBox();
+        for(int x=0;x<worker.size();x++){
+            if(worker.get(x).typeOfWorker.equals("Cashier"))choice.getItems().add((Cashier)worker.get(x));
+
+        }
+
+
+        button.setOnAction(e->{
+            if(choice.getValue()!=null){
+                if(choice.getValue().getOnBreak())
+                    choice.getValue().onBreak=false;
+                else choice.getValue().onBreak=true;}
+
+            stage.setScene(task_menu());
+
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return grid;
+    }
+
+
+
+    private GridPane set_stocker_break(){
+        GridPane grid = new GridPane();
+        Button button = new Button("Submit");
+
+
+
+        Label label = new Label(" Set Stocker On Break:");
+        ChoiceBox<Stocker> choice = new ChoiceBox();
+        for(int x=0;x<worker.size();x++)if(worker.get(x).typeOfWorker.equals("Stocker"))choice.getItems().add((Stocker)worker.get(x));
+
+
+        button.setOnAction(e->{
+            if(choice.getValue()!=null){
+                if(choice.getValue().getOnBreak())
+                    choice.getValue().onBreak=false;
+                else choice.getValue().onBreak=true;}
+
+            stage.setScene(task_menu());
+
+        });
+
+
+
+        grid.add(label,0,0);
+        grid.add(choice, 1, 0);
+        grid.add(button,2,0);
+
+
+        return grid;
+    }
+
+
+    private GridPane check_task(String str){
+        switch(str){
+            case "Pay Order":return pay_order();
+            case "Place Order":return place_order();
+            case "Active Cashier":return active_cashier();
+            case "Active Stocker": return active_stocker();
+            case "Cashier on Break":return set_cashier_break();
+            case "Stocker on Break":return set_stocker_break();
+            case "Start Thread":start_thread();break;
+        }
+        return new GridPane();
+    }
+
+    void start_thread(){
+        Thread thread = new Thread(new TimeThread(stage));
+        thread.start();
+
+    }
+
+
+
 }
